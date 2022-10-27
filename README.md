@@ -12,3 +12,4 @@ Bài nghiên cứu về SQLite
   - Hiện danh sách Recent
 - Setup Database Activity
 - Working Database Activity
+  - Thêm dòng dữ liệu dạng form
