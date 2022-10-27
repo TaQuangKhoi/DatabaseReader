@@ -1,8 +1,11 @@
 package com.taquangkhoi.databasereader;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 public class RecentDBHandler extends SQLiteOpenHelper {
 
@@ -47,5 +50,25 @@ public class RecentDBHandler extends SQLiteOpenHelper {
         // Kiểm tra xem CSDL có tồn tại không
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
+    }
+
+    public ArrayList<RecentRecord> readRecentRecords() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursorRecentRecords = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        ArrayList<RecentRecord> recentRecords = new ArrayList<>();
+
+        if(cursorRecentRecords.moveToFirst()) {
+            do {
+                int id = cursorRecentRecords.getInt(0);
+                String path = cursorRecentRecords.getString(1);
+                String openTime = cursorRecentRecords.getString(2);
+                RecentRecord recentRecord = new RecentRecord(id, path, openTime);
+
+                recentRecords.add(recentRecord);
+            } while (cursorRecentRecords.moveToNext());
+        }
+
+        cursorRecentRecords.close();
+        return recentRecords;
     }
 }
